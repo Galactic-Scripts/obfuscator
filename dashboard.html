@@ -1,63 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galactic Obfuscator Dashboard</title>
+<title>Galactic Obfuscator</title>
 <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f8ff; }
-    textarea { width: 100%; height: 200px; margin-bottom: 10px; }
-    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+body{
+font-family: Arial;
+background:#87CEEB;
+padding:40px;
+text-align:center;
+}
+textarea{
+width:80%;
+height:200px;
+margin:10px;
+}
+button{
+padding:10px 20px;
+font-size:18px;
+cursor:pointer;
+}
 </style>
 </head>
+
 <body>
+
 <h1>Galactic Obfuscator</h1>
 
-<label for="inputCode">Input Code:</label>
-<textarea id="inputCode" placeholder="Paste your code here..."></textarea>
+<textarea id="inputCode" placeholder="Paste code here"></textarea>
 
-<button onclick="obfuscateCode()">Obfuscate</button>
+<br>
 
-<label for="outputCode">Obfuscated Code:</label>
-<textarea id="outputCode" readonly placeholder="Result will appear here..."></textarea>
+<button onclick="obfuscate()">Obfuscate</button>
+
+<br>
+
+<textarea id="outputCode" placeholder="Result will appear here"></textarea>
 
 <script>
-async function obfuscateCode() {
-    const code = document.getElementById('inputCode').value;
-    const output = document.getElementById('outputCode');
+async function obfuscate(){
 
-    if (!code) {
-        alert('Please enter some code first!');
-        return;
-    }
+const code = document.getElementById("inputCode").value;
 
-    try {
-        const response = await fetch('https://galactic-obfuscator.up.railway.app/api/obfuscate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'API-KEY': 'V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca'
-            },
-            body: JSON.stringify({
-                preset: 'Medium', // required by API
-                code: code
-            })
-        });
+const response = await fetch("/obfuscate",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({code:code})
+});
 
-        if (!response.ok) throw new Error('Network response not ok');
+const data = await response.json();
 
-        const data = await response.json();
+if(data.status === "ok"){
+document.getElementById("outputCode").value = data.obfuscated;
+}else{
+document.getElementById("outputCode").value = data.error;
+}
 
-        if (data.status === 'ok') {
-            output.value = data.obfuscated;
-        } else {
-            output.value = `Error: ${data.error}`;
-        }
-
-    } catch (err) {
-        output.value = `Failed: ${err.message}`;
-    }
 }
 </script>
+
 </body>
 </html>
