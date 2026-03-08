@@ -1,87 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Galactic Obfuscator Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #1e90ff;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 50px;
-        }
-        h1 {
-            margin-bottom: 30px;
-        }
-        textarea {
-            width: 80%;
-            height: 200px;
-            margin-bottom: 20px;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 14px;
-            border-radius: 5px;
-            border: none;
-            resize: vertical;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            background-color: #ff8c00;
-            color: #fff;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #ffa500;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Galactic Obfuscator Dashboard</title>
 </head>
 <body>
-    <h1>Galactic Obfuscator Dashboard</h1>
-    
-    <textarea id="inputCode" placeholder="Paste your code here..."></textarea>
-    <button onclick="obfuscateCode()">Obfuscate</button>
-    <textarea id="outputCode" placeholder="Obfuscated code will appear here..." readonly></textarea>
+  <h1>Galactic Obfuscator</h1>
 
-    <script>
-        async function obfuscateCode() {
-            const code = document.getElementById("inputCode").value;
-            const output = document.getElementById("outputCode");
+  <textarea id="inputCode" placeholder="Paste your code here"></textarea>
+  <button id="obfuscateBtn">Obfuscate</button>
+  <textarea id="outputCode" placeholder="Obfuscated code will appear here"></textarea>
 
-            if (!code.trim()) {
-                output.value = "Please enter some code first!";
-                return;
-            }
+  <script>
+    const btn = document.getElementById('obfuscateBtn');
 
-            try {
-                output.value = "Obfuscating...";
+    btn.addEventListener('click', async () => {
+      const code = document.getElementById('inputCode').value;
+      const output = document.getElementById('outputCode');
 
-                const response = await fetch("https://web-production-5cef0.up.railway.app/api/obfuscate", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "API-KEY": "V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca"
-                    },
-                    body: JSON.stringify({ code: code })
-                });
+      try {
+        const response = await fetch("https://galactic-obfuscator.up.railway.app/api/obfuscate", {
+          method: "POST",
+          headers: {
+            "API-KEY": "V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            preset: "Medium", // you can choose other presets if you want
+            code: code
+          })
+        });
 
-                const data = await response.json();
+        const data = await response.json();
 
-                if (data.status === "ok") {
-                    output.value = data.obfuscated;
-                } else {
-                    output.value = `Error: ${data.error}`;
-                }
-            } catch (err) {
-                output.value = "Network or server error!";
-                console.error(err);
-            }
+        if (data.status === "ok") {
+          output.value = data.obfuscated;
+        } else {
+          output.value = "Error: " + data.error;
         }
-    </script>
+      } catch (err) {
+        output.value = "Network or server error!";
+        console.error(err);
+      }
+    });
+  </script>
 </body>
 </html>
