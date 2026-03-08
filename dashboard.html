@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - Galactic Obfuscator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body {background: linear-gradient(135deg, #6dd5fa, #ffffff); font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height:100vh; color:#333;}
+header {padding:20px; text-align:center; background:rgba(255,255,255,0.2); backdrop-filter:blur(8px);}
+header h1 {font-family:'Fredoka One', cursive; color:#003366;}
+nav {display:flex; justify-content:center; gap:25px; padding:15px 0; background:rgba(255,255,255,0.3); backdrop-filter: blur(5px);}
+nav a {text-decoration:none; color:#003366; font-weight:bold; padding:8px 15px; border-radius:6px; transition:all 0.3s ease;}
+nav a:hover {background:#003366; color:white;}
+.main {padding:60px 20px; text-align:center;}
+.main h2 {font-family:'Fredoka One', cursive; font-size:2.5rem; margin-bottom:20px; color:#003366;}
+.main p {font-size:1.1rem; max-width:700px; margin:auto; line-height:1.6;}
+.button {display:inline-block; margin-top:20px; padding:12px 35px; font-size:1rem; background:#003366; color:white; border-radius:8px; text-decoration:none; border:none; cursor:pointer; transition:background 0.3s ease;}
+.button:hover {background:#0055aa;}
+footer {background:#003366; color:white; text-align:center; padding:20px;}
+</style>
+</head>
+<body>
 
+<header>
+<h1>Dashboard</h1>
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="login.html">Login</a>
+<a href="register.html">Register</a>
+<a href="dashboard.html">Dashboard</a>
+</nav>
+
+<div class="main">
+<h2>Welcome to Your Dashboard</h2>
+<p>This is where users will see their account info, manage scripts, and access obfuscation tools. For now, this is a placeholder page to test the login flow.</p>
+<button class="button" onclick="logout()">Logout</button>
+</div>
+
+<footer>
+© 2026 Galactic Obfuscator
+</footer>
+
+<script>
+function logout(){
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
