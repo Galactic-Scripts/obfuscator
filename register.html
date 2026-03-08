@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - Galactic Obfuscator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body {
+    background: linear-gradient(135deg, #6dd5fa, #ffffff);
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    color:#333;
+}
+.container {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    padding:50px 30px;
+    border-radius:12px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.15);
+    max-width:400px;
+    width:100%;
+    text-align:center;
+}
+h1 {
+    font-family:'Fredoka One', cursive;
+    color:#003366;
+    margin-bottom:25px;
+}
+input {
+    width:100%;
+    padding:12px 15px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:1rem;
+}
+.button {
+    display:inline-block;
+    margin-top:20px;
+    padding:12px 35px;
+    font-size:1rem;
+    background:#003366;
+    color:white;
+    border-radius:8px;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    transition:background 0.3s ease;
+}
+.button:hover {
+    background:#0055aa;
+}
+p {
+    margin-top:15px;
+    font-size:0.95rem;
+}
+p a {
+    color:#003366;
+    text-decoration:none;
+    font-weight:bold;
+}
+p a:hover {
+    text-decoration:underline;
+}
+</style>
+</head>
+<body>
 
+<div class="container">
+<h1>Register</h1>
+<input type="text" placeholder="Username" id="username">
+<input type="email" placeholder="Email" id="email">
+<input type="password" placeholder="Password" id="password">
+<input type="password" placeholder="Confirm Password" id="confirm-password">
+<button class="button" onclick="register()">Register</button>
+<p>Already have an account? <a href="login.html">Login</a></p>
+</div>
+
+<script>
+function register(){
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm-password').value;
+
+    if(!username || !email || !password || !confirm){
+        alert("Please fill out all fields");
+        return;
+    }
+    if(password !== confirm){
+        alert("Passwords do not match");
+        return;
+    }
+    alert(`Registered as ${username}`);
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
