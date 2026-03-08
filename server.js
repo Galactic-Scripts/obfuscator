@@ -7,22 +7,27 @@ const app = express();
 app.use(express.json());
 app.use(cors()); // allow frontend
 
+const API_KEY = "V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca";
+
 app.post('/api/obfuscate', async (req, res) => {
   const { code, preset } = req.body;
+
   try {
     const response = await fetch("https://galactic-obfuscator.up.railway.app/api/obfuscate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "API-KEY": "V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca"
+        "API-KEY": API_KEY
       },
       body: JSON.stringify({ code, preset })
     });
+
     const data = await response.json();
     res.json(data);
-  } catch(err) {
+
+  } catch (err) {
     res.status(500).json({ status: 'Fail', error: err.toString() });
   }
 });
 
-app.listen(3000, () => console.log("Proxy running on port 3000"));
+app.listen(3000, () => console.log("Proxy running on http://localhost:3000"));
