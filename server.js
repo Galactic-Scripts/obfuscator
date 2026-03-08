@@ -1,30 +1,33 @@
-const express = require("express");
-const cors = require("cors");
-const app = express();
-const PORT = 3000;
+<!-- dashboard.html snippet -->
+<textarea id="inputCode" placeholder="Paste code here"></textarea>
+<button id="deobfuscateBtn">Deobfuscate</button>
+<textarea id="outputCode" placeholder="Result will appear here"></textarea>
 
-app.use(cors());
-app.use(express.json());
+<script>
+document.getElementById("deobfuscateBtn").addEventListener("click", async () => {
+    const code = document.getElementById("inputCode").value;
+    const apiKey = "V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca"; // your key
+    const preset = "DisableAntiTamper"; // or any preset you want
 
-const VALID_API_KEY = "V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca";
+    try {
+        const response = await fetch("https://galactic-obfuscator.up.railway.app/api/obfuscate", {
+            method: "POST",
+            headers: {
+                "API-KEY": apiKey,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ code: code, preset: preset })
+        });
 
-app.post("/api/deobfuscate", (req, res) => {
-    const { api_key, code } = req.body;
+        const data = await response.json();
 
-    if (api_key !== VALID_API_KEY) {
-        return res.status(401).json({ error: "Invalid API key" });
+        if (data.status === "ok") {
+            document.getElementById("outputCode").value = data.obfuscated;
+        } else {
+            alert("Error: " + data.error);
+        }
+    } catch (err) {
+        alert("Request failed: " + err);
     }
-
-    if (!code) {
-        return res.status(400).json({ error: "No code provided" });
-    }
-
-    // Simulate deobfuscation (replace this with real logic)
-    const deobfuscated = code.split("").reverse().join(""); // example: just reverses the code
-
-    res.json({ result: deobfuscated });
 });
-
-app.listen(PORT, () => {
-    console.log(`Deobfuscation server running on http://localhost:${PORT}`);
-});
+</script>
