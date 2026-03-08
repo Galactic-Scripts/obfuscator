@@ -43,44 +43,33 @@
     <textarea id="outputBox" placeholder="Obfuscated code will appear here..." readonly></textarea>
 
     <script>
-        async function obfuscateCode() {
-            const codeInput = document.getElementById("codeInput");
-            const outputBox = document.getElementById("outputBox");
+async function obfuscateCode() {
+    const code = document.getElementById("inputCode").value;
+    const output = document.getElementById("outputCode");
 
-            const code = codeInput.value.trim();
-            if (!code) {
-                alert("Please enter some code to obfuscate.");
-                return;
-            }
+    try {
+        const response = await fetch("https://web-production-5cef0.up.railway.app/api/obfuscate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "API-KEY": "V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca"
+            },
+            body: JSON.stringify({ code: code })
+        });
 
-            try {
-                const response = await fetch("https://galactic-obfuscator.up.railway.app/api/obfuscate", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "API-KEY": "V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca"
-                    },
-                    body: JSON.stringify({ code })
-                });
+        const data = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.status === "ok") {
-                    outputBox.value = data.obfuscated;
-                } else {
-                    outputBox.value = `Error: ${data.error}`;
-                }
-
-            } catch (err) {
-                console.error(err);
-                outputBox.value = `Network or server error: ${err.message}`;
-            }
+        if (data.status === "ok") {
+            output.value = data.obfuscated;
+        } else {
+            output.value = `Error: ${data.error}`;
         }
-    </script>
+    } catch (err) {
+        output.value = "Network or server error!";
+        console.error(err);
+    }
+}
+</script>
 
 </body>
 </html>
