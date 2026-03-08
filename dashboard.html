@@ -1,64 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Galactic Obfuscator</title>
-<style>
-body{
-font-family: Arial;
-background:#87CEEB;
-padding:40px;
-text-align:center;
-}
-textarea{
-width:80%;
-height:200px;
-margin:10px;
-}
-button{
-padding:10px 20px;
-font-size:18px;
-cursor:pointer;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Obfuscator Dashboard</title>
+    <style>
+        body {
+            font-family: 'Fredoka One', sans-serif;
+            background-color: #87CEEB;
+            color: #000;
+            text-align: center;
+            padding: 50px;
+        }
+        textarea {
+            width: 80%;
+            height: 200px;
+            margin: 10px 0;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 16px;
+        }
+        button {
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0B65C2;
+        }
+    </style>
 </head>
-
 <body>
 
-<h1>Galactic Obfuscator</h1>
+    <h1>Galactic Obfuscator</h1>
+    
+    <textarea id="codeInput" placeholder="Paste your code here..."></textarea><br>
+    <button onclick="obfuscateCode()">Obfuscate</button><br>
+    <textarea id="outputBox" placeholder="Obfuscated code will appear here..." readonly></textarea>
 
-<textarea id="inputCode" placeholder="Paste code here"></textarea>
+    <script>
+        async function obfuscateCode() {
+            const codeInput = document.getElementById("codeInput");
+            const outputBox = document.getElementById("outputBox");
 
-<br>
+            const code = codeInput.value.trim();
+            if (!code) {
+                alert("Please enter some code to obfuscate.");
+                return;
+            }
 
-<button onclick="obfuscate()">Obfuscate</button>
+            try {
+                const response = await fetch("https://galactic-obfuscator.up.railway.app/api/obfuscate", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "API-KEY": "V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca"
+                    },
+                    body: JSON.stringify({ code })
+                });
 
-<br>
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
 
-<textarea id="outputCode" placeholder="Result will appear here"></textarea>
+                const data = await response.json();
 
-<script>
-async function obfuscate(){
+                if (data.status === "ok") {
+                    outputBox.value = data.obfuscated;
+                } else {
+                    outputBox.value = `Error: ${data.error}`;
+                }
 
-const code = document.getElementById("inputCode").value;
-
-const response = await fetch("/obfuscate",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({code:code})
-});
-
-const data = await response.json();
-
-if(data.status === "ok"){
-document.getElementById("outputCode").value = data.obfuscated;
-}else{
-document.getElementById("outputCode").value = data.error;
-}
-
-}
-</script>
+            } catch (err) {
+                console.error(err);
+                outputBox.value = `Network or server error: ${err.message}`;
+            }
+        }
+    </script>
 
 </body>
 </html>
