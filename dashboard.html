@@ -57,7 +57,10 @@ const downloadBtn = document.getElementById("download-btn");
 
 obfuscateBtn.addEventListener("click", async () => {
     const code = input.value.trim();
-    if(!code) { alert("Please paste your code."); return; }
+    if(!code){
+        alert("Please paste your code.");
+        return;
+    }
 
     output.textContent = "Obfuscating...";
 
@@ -65,22 +68,40 @@ obfuscateBtn.addEventListener("click", async () => {
         const res = await fetch("https://web-production-5cef0.up.railway.app/api/obfuscate", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "API-KEY": "V81mv3P4XdLeo17iUezz8KT5QFkM7g4Hl4b0eFYmqMca"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({ code })
         });
 
         const data = await res.json();
 
-        if(data.status === "ok") {
+        if(data.status === "ok"){
             output.textContent = data.obfuscated;
         } else {
-            output.textContent = `Error: ${data.error || "Server returned an error"}`;
+            output.textContent = "Error: " + (data.error || "Server error");
         }
-    } catch(err) {
+
+    } catch(e){
         output.textContent = "Network or server error!";
     }
+});
+
+copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(output.textContent);
+});
+
+downloadBtn.addEventListener("click", () => {
+    const blob = new Blob([output.textContent], {type:"text/plain"});
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "obfuscated.lua";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
 });
 
 // Copy to clipboard
