@@ -4,25 +4,125 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard - Galactic Obfuscator</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+
 <style>
 * {margin:0;padding:0;box-sizing:border-box;}
-body {background: linear-gradient(135deg, #6dd5fa, #ffffff); color:#333; min-height:100vh; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display:flex; flex-direction:column;}
-header {padding:20px 0; text-align:center; background:rgba(255,255,255,0.2); backdrop-filter: blur(8px);}
-header h1 {font-family:'Fredoka One', cursive; font-size:2.5rem; color:#003366; letter-spacing:1px;}
-nav {display:flex; justify-content:center; gap:20px; padding:15px 0; background:rgba(255,255,255,0.3); backdrop-filter: blur(5px);}
-nav a {text-decoration:none; color:#003366; font-weight:bold; padding:8px 15px; border-radius:6px; transition:all 0.3s ease;}
-nav a:hover {background:#003366; color:white;}
-.main {flex:1; padding:50px 20px; max-width:800px; margin:auto; display:flex; flex-direction:column; gap:20px;}
-textarea {width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; font-family:monospace; font-size:1rem; resize:none; min-height:150px;}
-.output-container {position:relative;}
-.output {width:100%; padding:15px; border-radius:8px; border:1px solid #ccc; font-family:monospace; font-size:1rem; min-height:150px; overflow:auto; background:#f8f8f8; white-space:pre-wrap;}
-button {padding:10px 25px; font-size:1rem; border:none; border-radius:6px; cursor:pointer; background:#003366; color:white; transition:0.3s;}
-button:hover {background:#0055aa;}
-.button-group {display:flex; justify-content:center; gap:15px; margin-top:10px;}
-#obfuscate-btn {align-self:flex-start;}
+
+body {
+    background: linear-gradient(135deg, #6dd5fa, #ffffff);
+    color:#333;
+    min-height:100vh;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display:flex;
+    flex-direction:column;
+}
+
+header {
+    padding:20px 0;
+    text-align:center;
+    background:rgba(255,255,255,0.2);
+    backdrop-filter: blur(8px);
+}
+
+header h1 {
+    font-family:'Fredoka One', cursive;
+    font-size:2.5rem;
+    color:#003366;
+}
+
+nav {
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    padding:15px 0;
+    background:rgba(255,255,255,0.3);
+    backdrop-filter: blur(5px);
+}
+
+nav a {
+    text-decoration:none;
+    color:#003366;
+    font-weight:bold;
+    padding:8px 15px;
+    border-radius:6px;
+}
+
+nav a:hover {
+    background:#003366;
+    color:white;
+}
+
+.main {
+    flex:1;
+    padding:30px 15px;
+    max-width:900px;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+/* Bigger + responsive textarea */
+textarea {
+    width:100%;
+    padding:15px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-family:monospace;
+    font-size:1rem;
+    resize:vertical;
+    min-height:250px;
+}
+
+/* Output hidden initially */
+.output-container {
+    display:none;
+    flex-direction:column;
+    gap:10px;
+}
+
+.output {
+    padding:15px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-family:monospace;
+    background:#f8f8f8;
+    white-space:pre-wrap;
+}
+
+button {
+    padding:10px 25px;
+    font-size:1rem;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    background:#003366;
+    color:white;
+}
+
+button:hover {
+    background:#0055aa;
+}
+
+.button-group {
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+/* Mobile scaling */
+@media (max-width:600px) {
+    textarea {
+        min-height:300px;
+        font-size:0.9rem;
+    }
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -35,12 +135,14 @@ button:hover {background:#0055aa;}
 </nav>
 
 <div class="main">
-<label for="code-input">Paste your Luau code here:</label>
+<label>Paste your Luau code here:</label>
 <textarea id="code-input" placeholder="Paste your Luau code here"></textarea>
+
 <button id="obfuscate-btn">Obfuscate</button>
 
-<div class="output-container">
+<div class="output-container" id="output-container">
 <div id="code-output" class="output"></div>
+
 <div class="button-group">
 <button id="copy-btn">Copy</button>
 <button id="download-btn">Download</button>
@@ -51,9 +153,28 @@ button:hover {background:#0055aa;}
 <script>
 const input = document.getElementById("code-input");
 const output = document.getElementById("code-output");
+const container = document.getElementById("output-container");
+
 const obfuscateBtn = document.getElementById("obfuscate-btn");
 const copyBtn = document.getElementById("copy-btn");
 const downloadBtn = document.getElementById("download-btn");
+
+let lastResult = "";
+
+// Generate random 14-letter string
+function randomName(length = 14) {
+    const chars = "abcdefghijklmnopqrstuvwxyz";
+    let result = "";
+    for(let i = 0; i < length; i++){
+        result += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return result;
+}
+
+// Get file size
+function getSize(str) {
+    return new Blob([str]).size;
+}
 
 obfuscateBtn.addEventListener("click", async () => {
     const code = input.value.trim();
@@ -62,63 +183,53 @@ obfuscateBtn.addEventListener("click", async () => {
         return;
     }
 
+    container.style.display = "flex";
     output.textContent = "Obfuscating...";
 
     try {
         const res = await fetch("https://web-production-5cef0.up.railway.app/api/obfuscate", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ code })
         });
 
         const data = await res.json();
 
         if(data.status === "ok"){
-            output.textContent = data.obfuscated;
+            lastResult = data.obfuscated;
+
+            const size = getSize(lastResult);
+
+            output.textContent = 
+                "Successfully Obfuscated!\n\n" +
+                "File size: " + size + " bytes";
         } else {
-            output.textContent = "Error: " + (data.error || "Server error");
+            output.textContent = "Error Obfuscating: " + (data.error || "Server error");
         }
 
     } catch(e){
-        output.textContent = "Network or server error!";
+        output.textContent = "Error Obfuscating: Network issue";
     }
 });
 
 copyBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(output.textContent);
+    if(!lastResult) return;
+    navigator.clipboard.writeText(lastResult);
 });
 
 downloadBtn.addEventListener("click", () => {
-    const blob = new Blob([output.textContent], {type:"text/plain"});
+    if(!lastResult) return;
+
+    const blob = new Blob([lastResult], {type:"text/plain"});
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "obfuscated.lua";
+    a.download = randomName() + ".txt";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    URL.revokeObjectURL(url);
-});
-
-// Copy to clipboard
-copyBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(output.textContent);
-});
-
-// Download as file
-downloadBtn.addEventListener("click", () => {
-    const blob = new Blob([output.textContent], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "obfuscated.lua";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
     URL.revokeObjectURL(url);
 });
 </script>
