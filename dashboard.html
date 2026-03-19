@@ -133,23 +133,18 @@ button:hover {
 <nav>
 <a href="index.html">Home</a>
 <a href="dashboard.html">Dashboard</a>
+
+<div class="settings-wrapper">
+    <button id="settings-btn">⚙️ Settings</button>
+
+    <div id="settings-menu" class="settings-menu">
+        <p><strong>Themes</strong></p>
+        <button class="theme-btn" data-theme="light">Light</button>
+        <button class="theme-btn" data-theme="dark">Dark</button>
+        <button class="theme-btn" data-theme="system">System</button>
+    </div>
+</div>
 </nav>
-
-<div class="main">
-<label>Paste your Luau code here:</label>
-<textarea id="code-input" placeholder="Paste your Luau code here"></textarea>
-
-<button id="obfuscate-btn">Obfuscate</button>
-
-<div class="output-container" id="output-container">
-<div id="code-output" class="output"></div>
-
-<div class="button-group">
-<button id="copy-btn">Copy</button>
-<button id="download-btn">Download</button>
-</div>
-</div>
-</div>
 
 <script>
 const input = document.getElementById("code-input");
