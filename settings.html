@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings</title>
 
+<style>
+body {
+    font-family: Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+select {
+    padding:10px;
+    font-size:1rem;
+}
+</style>
+</head>
+
+<body>
+
+<div>
+<h2>Theme</h2>
+<select id="theme">
+<option value="system">System</option>
+<option value="light">Light</option>
+<option value="dark">Dark</option>
+</select>
+</div>
+
+<script>
+const select = document.getElementById("theme");
+select.value = localStorage.getItem("theme") || "system";
+
+select.addEventListener("change", () => {
+    localStorage.setItem("theme", select.value);
+    location.reload();
+});
+</script>
+
+</body>
+</html>
