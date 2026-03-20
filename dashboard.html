@@ -60,11 +60,10 @@ nav a:hover {
     width:100%;
     display:flex;
     flex-direction:column;
-    align-items:center; /* center everything */
+    align-items:center;
     gap:20px;
 }
 
-/* Bigger + responsive textarea */
 textarea {
     width:60%;
     padding:15px;
@@ -76,7 +75,6 @@ textarea {
     min-height:250px;
 }
 
-/* Output hidden initially */
 .output-container {
     display:none;
     flex-direction:column;
@@ -114,12 +112,54 @@ button:hover {
     flex-wrap:wrap;
 }
 
-/* Mobile scaling */
+select {
+    padding:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    width:60%;
+}
+
+/* Mobile */
 @media (max-width:600px) {
     textarea {
         min-height:300px;
         font-size:0.9rem;
     }
+}
+
+/* DARK MODE */
+body.dark {
+    background: linear-gradient(135deg, #0f172a, #020617);
+    color: #e5e7eb;
+}
+
+body.dark header,
+body.dark nav {
+    background: rgba(0,0,0,0.4);
+}
+
+body.dark nav a {
+    color: #e5e7eb;
+}
+
+body.dark nav a:hover {
+    background: #1e293b;
+}
+
+body.dark textarea,
+body.dark .output,
+body.dark select {
+    background: #020617;
+    color: #e5e7eb;
+    border: 1px solid #334155;
+}
+
+body.dark button {
+    background: #1e293b;
+}
+
+body.dark button:hover {
+    background: #334155;
 }
 </style>
 </head>
@@ -133,11 +173,22 @@ button:hover {
 <nav>
 <a href="index.html">Home</a>
 <a href="dashboard.html">Dashboard</a>
+<a href="settings.html">Settings</a>
 </nav>
 
 <div class="main">
+
 <label>Paste your Luau code here:</label>
 <textarea id="code-input" placeholder="Paste your Luau code here"></textarea>
+
+<label>Select Preset:</label>
+<select id="preset">
+<option value="minify">Minify</option>
+<option value="weak">Weak (Small file size - No antitamper)</option>
+<option value="medium">Medium (Standard size - Runtime encode)</option>
+<option value="strong">Strong (Large size - Runtime encode)</option>
+<option value="disableAntiTamper">DisableAntiTamper (Like medium without antitamper)</option>
+</select>
 
 <button id="obfuscate-btn">Obfuscate</button>
 
@@ -149,6 +200,7 @@ button:hover {
 <button id="download-btn">Download</button>
 </div>
 </div>
+
 </div>
 
 <script>
@@ -162,7 +214,7 @@ const downloadBtn = document.getElementById("download-btn");
 
 let lastResult = "";
 
-// Generate random 14-letter string
+// Random filename
 function randomName(length = 14) {
     const chars = "abcdefghijklmnopqrstuvwxyz";
     let result = "";
@@ -172,9 +224,11 @@ function randomName(length = 14) {
     return result;
 }
 
-// Get file size
-function getSize(str) {
-    return new Blob([str]).size;
+// Format file size
+function formatSize(bytes) {
+    if(bytes < 1024) return bytes + " bytes";
+    if(bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
 }
 
 obfuscateBtn.addEventListener("click", async () => {
@@ -184,6 +238,8 @@ obfuscateBtn.addEventListener("click", async () => {
         return;
     }
 
+    const preset = document.getElementById("preset").value;
+
     container.style.display = "flex";
     output.textContent = "Obfuscating...";
 
@@ -191,7 +247,7 @@ obfuscateBtn.addEventListener("click", async () => {
         const res = await fetch("https://web-production-5cef0.up.railway.app/api/obfuscate", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ code })
+            body: JSON.stringify({ code, preset })
         });
 
         const data = await res.json();
@@ -199,17 +255,17 @@ obfuscateBtn.addEventListener("click", async () => {
         if(data.status === "ok"){
             lastResult = data.obfuscated;
 
-            const size = getSize(lastResult);
+            const size = formatSize(new Blob([lastResult]).size);
 
-            output.textContent = 
+            output.textContent =
                 "Successfully Obfuscated!\n\n" +
-                "File size: " + size + " bytes";
+                "File size: " + size;
         } else {
-            output.textContent = "Error Obfuscating: " + (data.error || "Server error");
+            output.textContent = "Error: " + (data.error || "Server error");
         }
 
     } catch(e){
-        output.textContent = "Error Obfuscating: Network issue";
+        output.textContent = "Error: Network issue";
     }
 });
 
@@ -232,6 +288,30 @@ downloadBtn.addEventListener("click", () => {
     document.body.removeChild(a);
 
     URL.revokeObjectURL(url);
+});
+
+/* THEME SYSTEM */
+function applyTheme(theme) {
+    if(theme === "system"){
+        if(window.matchMedia("(prefers-color-scheme: dark)").matches){
+            document.body.classList.add("dark");
+        } else {
+            document.body.classList.remove("dark");
+        }
+    } else if(theme === "dark"){
+        document.body.classList.add("dark");
+    } else {
+        document.body.classList.remove("dark");
+    }
+}
+
+const savedTheme = localStorage.getItem("theme") || "system";
+applyTheme(savedTheme);
+
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if((localStorage.getItem("theme") || "system") === "system"){
+        applyTheme("system");
+    }
 });
 </script>
 
