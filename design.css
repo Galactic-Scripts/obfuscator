@@ -1,0 +1,436 @@
+/* ══════════════════════════════════════
+   Galactic Obfuscator — design.css
+   ══════════════════════════════════════ */
+
+/* ── Theme variables ── */
+:root[data-theme="dark"] {
+  --bg:           #0b0d12;
+  --bg2:          #111420;
+  --bg3:          #181c2a;
+  --border:       rgba(99,120,255,0.18);
+  --accent:       #5c6fff;
+  --accent2:      #a78bfa;
+  --text:         #e8eaff;
+  --text-muted:   #6b7099;
+  --glow:         rgba(92,111,255,0.35);
+  --star:         rgba(255,255,255,0.55);
+  --toggle-bg:    #1c2038;
+  --toggle-icon:  #a78bfa;
+  --nav-bg:       rgba(11,13,18,0.85);
+  --editor-bg:    #0d1020;
+  --scrollbar:    #2a2f4a;
+}
+:root[data-theme="light"] {
+  --bg:           #f0f2ff;
+  --bg2:          #ffffff;
+  --bg3:          #e8ecff;
+  --border:       rgba(92,111,255,0.2);
+  --accent:       #4455ee;
+  --accent2:      #7c3aed;
+  --text:         #1a1d3a;
+  --text-muted:   #6b6fa8;
+  --glow:         rgba(68,85,238,0.18);
+  --star:         rgba(68,85,238,0.2);
+  --toggle-bg:    #dde0ff;
+  --toggle-icon:  #f59e0b;
+  --nav-bg:       rgba(240,242,255,0.9);
+  --editor-bg:    #f8f9ff;
+  --scrollbar:    #c5caee;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Geist', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.4s, color 0.4s;
+  overflow-x: hidden;
+}
+a {
+  text-decoration: none;
+}
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: transparent; border-radius: 6px; }
+/* ── Stars background ── */
+.stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.stars span {
+  position: absolute;
+  width: 2px; height: 2px;
+  border-radius: 50%;
+  background: var(--star);
+  animation: twinkle var(--d, 3s) infinite var(--delay, 0s) ease-in-out;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.6); }
+}
+
+/* ── Nebula glow ── */
+.nebula {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.18;
+  transition: opacity 0.4s;
+}
+[data-theme="light"] .nebula { opacity: 0.1; }
+.nebula-1 { width: 600px; height: 600px; background: #5c6fff; top: -150px; left: -120px; }
+.nebula-2 { width: 400px; height: 400px; background: #a78bfa; bottom: -100px; right: -80px; }
+.nebula-3 { width: 300px; height: 300px; background: #06b6d4; top: 40%; left: 50%; }
+
+/* ── Nav ── */
+nav {
+  position: sticky;
+  top: 0; z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 64px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.4s, border-color 0.4s;
+}
+.nav-logo {
+  font-family: 'Geist', sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.03em;
+}
+.nav-logo span {
+  font-family: 'Geist Mono', monospace;
+  font-weight: 400;
+  font-size: 0.7rem;
+  -webkit-text-fill-color: var(--text-muted);
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.15em;
+}
+.nav-links { display: flex; gap: 0.25rem; }
+.nav-links a {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--accent);
+  background: rgba(92,111,255,0.1);
+}
+
+/* ── Layout ── */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 2rem 6rem;
+}
+
+/* ── Page header ── */
+.page-header {
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.6s ease both;
+}
+.page-header h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+.page-header h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.page-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  font-family: 'Geist Mono', monospace;
+}
+
+/* ── Stats row ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.6s 0.05s ease both;
+}
+@media (max-width: 600px) { .stats-row { grid-template-columns: 1fr 1fr; } }
+
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.1rem 1.3rem;
+  transition: background 0.4s, box-shadow 0.3s;
+}
+.stat-card:hover { box-shadow: 0 0 24px var(--glow); }
+.stat-card .val {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-card .lbl {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  letter-spacing: 0.08em;
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.4s, border-color 0.4s, box-shadow 0.3s;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(92,111,255,0.06), transparent 60%);
+  pointer-events: none;
+}
+.card:hover { box-shadow: 0 0 32px var(--glow); }
+
+.card-label {
+  font-size: 0.7rem;
+  font-family: 'Geist Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.card-label::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+/* ── Editor grid ── */
+.editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  animation: fadeUp 0.6s 0.15s ease both;
+}
+@media (max-width: 720px) {
+  .editor-grid { grid-template-columns: 1fr; }
+}
+
+textarea {
+  width: 100%;
+  height: 320px;
+  background: var(--editor-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  padding: 1rem 1.1rem;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.25s, background 0.4s, box-shadow 0.25s;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar) transparent;
+}
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+textarea::placeholder { color: var(--text-muted); }
+
+/* ── Actions ── */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  animation: fadeUp 0.6s 0.25s ease both;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 10px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.22s;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.1);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.btn:hover::after { opacity: 1; }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  box-shadow: 0 4px 18px var(--glow);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px var(--glow);
+}
+.btn-secondary {
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* ── Progress bar ── */
+.progress-wrap {
+  height: 3px;
+  background: var(--bg3);
+  border-radius: 2px;
+  margin-top: 0.75rem;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.progress-wrap.active { opacity: 1; }
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+  transition: width 0.05s linear;
+}
+
+/* ── Status bar ── */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  animation: fadeUp 0.6s 0.35s ease both;
+}
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  flex-shrink: 0;
+}
+.status-bar span { margin-left: auto; color: var(--accent); }
+
+/* ── Theme toggle button ── */
+#theme-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 200;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--toggle-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35), 0 0 0 1px var(--border);
+  transition: background 0.35s, border-color 0.35s, transform 0.2s, box-shadow 0.3s;
+}
+#theme-toggle:hover {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 0 6px 28px var(--glow);
+}
+#theme-toggle svg {
+  width: 22px; height: 22px;
+  color: var(--toggle-icon);
+  transition: color 0.35s, opacity 0.3s;
+}
+
+/* icon swap */
+#icon-moon { display: block; }
+#icon-sun  { display: none;  }
+[data-theme="light"] #icon-moon { display: none;  }
+[data-theme="light"] #icon-sun  { display: block; }
+
+/* ── Toast notification ── */
+.toast {
+  position: fixed;
+  bottom: 5.5rem; right: 2rem;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  z-index: 300;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
