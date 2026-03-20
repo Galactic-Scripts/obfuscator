@@ -6,7 +6,6 @@
 <title>Galactic Obfuscator</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 
-<!-- Open Graph / Discord Embed -->
 <meta property="og:title" content="Galactic Obfuscator">
 <meta property="og:description" content="The best obfuscator that's online and free!">
 <meta property="og:image" content="https://galactic-scripts.github.io/obfuscator/assets/galactic-obfuscator.png">
@@ -15,6 +14,7 @@
 
 <style>
 * {margin:0;padding:0;box-sizing:border-box;}
+
 body {
     background: linear-gradient(135deg, #6dd5fa, #ffffff);
     color:#333;
@@ -23,18 +23,20 @@ body {
     flex-direction:column;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 header {
     padding:20px 0;
     text-align:center;
     background:rgba(255,255,255,0.2);
     backdrop-filter: blur(8px);
 }
+
 header h1 {
     font-family:'Fredoka One', cursive;
     font-size:2.8rem;
     color:#003366;
-    letter-spacing:1px;
 }
+
 nav {
     display:flex;
     justify-content:center;
@@ -43,6 +45,7 @@ nav {
     background:rgba(255,255,255,0.3);
     backdrop-filter: blur(5px);
 }
+
 nav a {
     text-decoration:none;
     color:#003366;
@@ -51,7 +54,9 @@ nav a {
     border-radius:6px;
     transition:all 0.3s ease;
 }
+
 nav a:hover {background:#003366; color:white;}
+
 .hero {
     text-align:center;
     padding:100px 20px;
@@ -60,52 +65,86 @@ nav a:hover {background:#003366; color:white;}
     flex-direction:column;
     justify-content:center;
 }
+
 .hero h2 {
     font-family:'Fredoka One', cursive;
     font-size:3rem;
     margin-bottom:20px;
     color:#003366;
 }
+
 .hero p {
     font-size:1.2rem;
     max-width:600px;
     margin:0 auto 30px;
 }
+
 .button {
     display:inline-block;
-    padding:12px 25px; /* smaller than before */
+    padding:12px 25px;
     font-size:1rem;
     background:#003366;
     color:white;
     border-radius:8px;
     text-decoration:none;
-    transition: background 0.3s ease;
 }
+
 .button:hover {background:#0055aa;}
+
 .section {
     padding:60px 20px;
     text-align:center;
 }
+
 .section h3 {
     font-family:'Fredoka One', cursive;
     font-size:2rem;
     margin-bottom:20px;
     color:#003366;
 }
+
 .section p {
     font-size:1rem;
     max-width:600px;
     margin:auto;
-    line-height:1.6;
 }
+
 footer {
     background:#003366;
     color:white;
     text-align:center;
     padding:20px;
 }
+
+/* DARK MODE */
+body.dark {
+    background: linear-gradient(135deg, #0f172a, #020617);
+    color: #e5e7eb;
+}
+
+body.dark header,
+body.dark nav {
+    background: rgba(0,0,0,0.4);
+}
+
+body.dark nav a {
+    color: #e5e7eb;
+}
+
+body.dark nav a:hover {
+    background: #1e293b;
+}
+
+body.dark .button {
+    background:#1e293b;
+}
+
+body.dark .button:hover {
+    background:#334155;
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -115,22 +154,48 @@ footer {
 <nav>
 <a href="index.html">Home</a>
 <a href="dashboard.html">Dashboard</a>
+<a href="settings.html">Settings</a>
 </nav>
 
 <div class="hero">
 <h2>Secure and Obfuscate Your Scripts</h2>
-<p>Galactic Obfuscator provides advanced script protection tools with cloud processing, a user-friendly dashboard, and free obfuscation for everyone.</p>
+<p>Galactic Obfuscator provides advanced script protection tools with cloud processing.</p>
 <a class="button" href="dashboard.html">Get Started</a>
 </div>
 
 <div class="section">
 <h3>Why Choose Galactic?</h3>
-<p>Fast obfuscation, secure cloud processing, and an intuitive dashboard make it the top choice for developers looking to protect their scripts effortlessly.</p>
+<p>Fast obfuscation, secure cloud processing, and an intuitive dashboard.</p>
 </div>
 
 <footer>
 © 2026 Galactic Obfuscator
 </footer>
+
+<script>
+function applyTheme(theme) {
+    if(theme === "system"){
+        if(window.matchMedia("(prefers-color-scheme: dark)").matches){
+            document.body.classList.add("dark");
+        } else {
+            document.body.classList.remove("dark");
+        }
+    } else if(theme === "dark"){
+        document.body.classList.add("dark");
+    } else {
+        document.body.classList.remove("dark");
+    }
+}
+
+const savedTheme = localStorage.getItem("theme") || "system";
+applyTheme(savedTheme);
+
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if((localStorage.getItem("theme") || "system") === "system"){
+        applyTheme("system");
+    }
+});
+</script>
 
 </body>
 </html>
