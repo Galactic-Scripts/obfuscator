@@ -1,206 +1,292 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galactic Obfuscator</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Galactic Obfuscator - Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;800&family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="design.css">
+  <style>
+    /* ── Hero ── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: calc(100vh - 64px);
+      padding: 4rem 2rem;
+      position: relative;
+      z-index: 1;
+    }
 
-<meta property="og:title" content="Galactic Obfuscator">
-<meta property="og:description" content="The best obfuscator that's online and free!">
-<meta property="og:image" content="https://galactic-scripts.github.io/obfuscator/assets/galactic-obfuscator.png">
-<meta property="og:url" content="https://galactic-scripts.github.io/obfuscator/index.html">
-<meta property="og:type" content="website">
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(92,111,255,0.1);
+      border: 1px solid rgba(92,111,255,0.25);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.5s ease both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+    }
 
-<style>
-* {margin:0;padding:0;box-sizing:border-box;}
+    .hero h1 {
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      max-width: 800px;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-body {
-    background: linear-gradient(135deg, #6dd5fa, #ffffff);
-    color:#1f2937;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+    .hero-sub {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 480px;
+      margin-top: 1.25rem;
+      line-height: 1.6;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
 
-header {
-    padding:20px 0;
-    text-align:center;
-    background:rgba(255,255,255,0.2);
-    backdrop-filter: blur(8px);
-}
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      animation: fadeUp 0.5s 0.3s ease both;
+    }
 
-header h1 {
-    font-family:'Fredoka One', cursive;
-    font-size:2.8rem;
-    color:#003366;
-}
+    .btn-lg {
+      padding: 0.85rem 2rem;
+      font-size: 0.95rem;
+      border-radius: 12px;
+    }
 
-nav {
-    display:flex;
-    justify-content:center;
-    gap:25px;
-    padding:15px 0;
-    background:rgba(255,255,255,0.3);
-    backdrop-filter: blur(5px);
-}
+    /* ── Changelog ── */
+    .changelog-section {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
 
-nav a {
-    text-decoration:none;
-    color:#003366;
-    font-weight:bold;
-    padding:8px 15px;
-    border-radius:6px;
-    transition:all 0.3s ease;
-}
+    .section-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
 
-nav a:hover {background:#003366; color:white;}
+    .changelog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
 
-.hero {
-    text-align:center;
-    padding:100px 20px;
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-}
+    .changelog-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.5s ease both;
+    }
+    .changelog-item:last-child { border-bottom: none; }
 
-.hero h2 {
-    font-family:'Fredoka One', cursive;
-    font-size:3rem;
-    margin-bottom:20px;
-    color:#003366;
-}
+    .changelog-date {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      padding-top: 0.2rem;
+      letter-spacing: 0.05em;
+    }
 
-.hero p {
-    font-size:1.2rem;
-    max-width:600px;
-    margin:0 auto 30px;
-}
+    .changelog-body {}
 
-.button {
-    display:inline-block;
-    padding:12px 25px;
-    font-size:1rem;
-    background:#003366;
-    color:white;
-    border-radius:8px;
-    text-decoration:none;
-}
+    .changelog-version {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent2);
+      background: rgba(167,139,250,0.1);
+      border: 1px solid rgba(167,139,250,0.2);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      margin-bottom: 0.6rem;
+    }
 
-.button:hover {background:#0055aa;}
+    .changelog-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
 
-.section {
-    padding:60px 20px;
-    text-align:center;
-}
+    .changelog-notes {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .changelog-notes li {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 0.6rem;
+      line-height: 1.5;
+    }
+    .changelog-notes li::before {
+      content: '—';
+      color: var(--accent);
+      flex-shrink: 0;
+    }
 
-.section h3 {
-    font-family:'Fredoka One', cursive;
-    font-size:2rem;
-    margin-bottom:20px;
-    color:#003366;
-}
+    /* tags */
+    .tag {
+      display: inline-block;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      margin-left: 0.4rem;
+      vertical-align: middle;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .tag-new  { background: rgba(34,197,94,0.12);  color: #22c55e; }
+    .tag-fix  { background: rgba(251,191,36,0.12); color: #fbbf24; }
+    .tag-upd  { background: rgba(92,111,255,0.12); color: var(--accent); }
 
-.section p {
-    font-size:1rem;
-    max-width:600px;
-    margin:auto;
-}
-
-footer {
-    background:#003366;
-    color:white;
-    text-align:center;
-    padding:20px;
-}
-
-body.dark {
-    background: linear-gradient(135deg, #0f172a, #020617);
-    color: #e5e7eb;
-}
-
-body.dark * {
-    color: inherit;
-}
-
-body.dark header,
-body.dark nav {
-    background: rgba(0,0,0,0.4);
-}
-
-body.dark nav a {
-    color: #e5e7eb;
-}
-
-body.dark nav a:hover {
-    background: #1e293b;
-    color: white;
-}
-
-body.dark .button {
-    background:#1e293b;
-    color:white;
-}
-
-body.dark .button:hover {
-    background:#334155;
-}
-</style>
+    @media (max-width: 560px) {
+      .changelog-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    }
+  </style>
 </head>
-
 <body>
 
-<header>
-<h1>Galactic Obfuscator</h1>
-</header>
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div class="nebula nebula-3"></div>
 
+<!-- Nav -->
 <nav>
-<a href="index.html">Home</a>
-<a href="dashboard.html">Dashboard</a>
-<a href="settings.html">Settings</a>
+  <a href="/" class="nav-logo">Galactic<span>OBFUSCATOR</span></a>
+  <div class="nav-links">
+    <a href="home.html" class="active">Home</a>
+    <a href="index.html">Dashboard</a>
+  </div>
 </nav>
 
-<div class="hero">
-<h2>Secure and Obfuscate Your Scripts</h2>
-<p>Galactic Obfuscator provides advanced script protection tools with cloud processing.</p>
-<a class="button" href="dashboard.html">Get Started</a>
-</div>
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">Luau Code Obfuscator</div>
+  <h1>Protect your<br><em>Luau scripts</em></h1>
+  <p class="hero-sub">High level obfuscation in browser, no register.</p>
+  <div class="hero-actions">
+    <a href="index.html" class="btn btn-primary btn-lg">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      Open Dashboard
+    </a>
+    <a href="#changelog" class="btn btn-secondary btn-lg">Changelog</a>
+  </div>
+</section>
 
-<div class="section">
-<h3>Why Choose Galactic?</h3>
-<p>Fast obfuscation, secure cloud processing, and an intuitive dashboard.</p>
-</div>
+<!-- Changelog -->
+<section class="changelog-section" id="changelog">
+  <div class="section-label">Changelog</div>
 
-<footer>
-© 2026 Galactic Obfuscator
-</footer>
+  <div class="changelog-list">
+
+
+
+  </div>
+</section>
+
+<!-- Theme Toggle -->
+<button id="theme-toggle" title="Toggle theme">
+  <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none"
+    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+  </svg>
+  <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none"
+    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/>
+    <line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/>
+    <line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+</button>
 
 <script>
-function applyTheme(theme) {
-    if(theme === "system"){
-        if(window.matchMedia("(prefers-color-scheme: dark)").matches){
-            document.body.classList.add("dark");
-        } else {
-            document.body.classList.remove("dark");
-        }
-    } else if(theme === "dark"){
-        document.body.classList.add("dark");
-    } else {
-        document.body.classList.remove("dark");
-    }
-}
+  // Stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('span');
+    s.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --d:${2+Math.random()*4}s;
+      --delay:${Math.random()*5}s;
+      opacity:${0.2+Math.random()*0.6};
+      width:${Math.random()<0.15?3:2}px;
+      height:${Math.random()<0.15?3:2}px;
+    `;
+    starsEl.appendChild(s);
+  }
 
-const savedTheme = localStorage.getItem("theme") || "system";
-applyTheme(savedTheme);
-
-window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-    if((localStorage.getItem("theme") || "system") === "system"){
-        applyTheme("system");
-    }
-});
+  // Theme toggle
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const html = document.documentElement;
+    html.setAttribute('data-theme',
+      html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+    );
+  });
 </script>
-
 </body>
 </html>
