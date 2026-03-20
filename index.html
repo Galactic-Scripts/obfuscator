@@ -17,7 +17,7 @@
 
 body {
     background: linear-gradient(135deg, #6dd5fa, #ffffff);
-    color:#333;
+    color:#1f2937;
     min-height:100vh;
     display:flex;
     flex-direction:column;
@@ -116,10 +116,13 @@ footer {
     padding:20px;
 }
 
-/* DARK MODE */
 body.dark {
     background: linear-gradient(135deg, #0f172a, #020617);
     color: #e5e7eb;
+}
+
+body.dark * {
+    color: inherit;
 }
 
 body.dark header,
@@ -133,10 +136,12 @@ body.dark nav a {
 
 body.dark nav a:hover {
     background: #1e293b;
+    color: white;
 }
 
 body.dark .button {
     background:#1e293b;
+    color:white;
 }
 
 body.dark .button:hover {
