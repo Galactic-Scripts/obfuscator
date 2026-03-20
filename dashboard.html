@@ -12,7 +12,7 @@
 
 body {
     background: linear-gradient(135deg, #6dd5fa, #ffffff);
-    color:#333;
+    color:#1f2937;
     min-height:100vh;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display:flex;
@@ -119,7 +119,6 @@ select {
     width:60%;
 }
 
-/* Mobile */
 @media (max-width:600px) {
     textarea {
         min-height:300px;
@@ -127,10 +126,13 @@ select {
     }
 }
 
-/* DARK MODE */
 body.dark {
     background: linear-gradient(135deg, #0f172a, #020617);
     color: #e5e7eb;
+}
+
+body.dark * {
+    color: inherit;
 }
 
 body.dark header,
@@ -144,6 +146,7 @@ body.dark nav a {
 
 body.dark nav a:hover {
     background: #1e293b;
+    color: white;
 }
 
 body.dark textarea,
@@ -156,6 +159,7 @@ body.dark select {
 
 body.dark button {
     background: #1e293b;
+    color: white;
 }
 
 body.dark button:hover {
@@ -214,7 +218,6 @@ const downloadBtn = document.getElementById("download-btn");
 
 let lastResult = "";
 
-// Random filename
 function randomName(length = 14) {
     const chars = "abcdefghijklmnopqrstuvwxyz";
     let result = "";
@@ -224,7 +227,6 @@ function randomName(length = 14) {
     return result;
 }
 
-// Format file size
 function formatSize(bytes) {
     if(bytes < 1024) return bytes + " bytes";
     if(bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
@@ -254,12 +256,8 @@ obfuscateBtn.addEventListener("click", async () => {
 
         if(data.status === "ok"){
             lastResult = data.obfuscated;
-
             const size = formatSize(new Blob([lastResult]).size);
-
-            output.textContent =
-                "Successfully Obfuscated!\n\n" +
-                "File size: " + size;
+            output.textContent = "Successfully Obfuscated!\n\nFile size: " + size;
         } else {
             output.textContent = "Error: " + (data.error || "Server error");
         }
@@ -290,7 +288,6 @@ downloadBtn.addEventListener("click", () => {
     URL.revokeObjectURL(url);
 });
 
-/* THEME SYSTEM */
 function applyTheme(theme) {
     if(theme === "system"){
         if(window.matchMedia("(prefers-color-scheme: dark)").matches){
