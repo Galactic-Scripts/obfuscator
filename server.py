@@ -23,6 +23,7 @@ def obfuscate():
             },
             json={
                 "preset": "Medium",
+                "performance": "Low",
                 "code": code
             }
         )
